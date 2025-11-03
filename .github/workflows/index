@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blue procotol dailies</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --muted:#9aa6b2;
+      --accent:#3da0ff;
+      --success:#00c46b;
+      --white:#ffffff;
+    }
+    html,body{height:100%;margin:0;}
+    body{
+      font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background:linear-gradient(180deg,var(--bg) 0%, #071018 100%);
+      color:var(--muted);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
+    }
+
+    .card{
+      width:min(720px,96vw);
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:14px;
+      padding:28px;
+      box-shadow:0 6px 30px rgba(2,6,12,0.6);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+
+    h1{margin:0 0 8px 0;color:var(--white);font-size:20px;font-weight:600;}
+    p.lead{margin:0 0 18px 0;color:var(--muted);font-size:13px;}
+
+    .list{display:flex;flex-direction:column;gap:10px;}
+
+    label.item{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 12px;
+      border-radius:10px;
+      cursor:pointer;
+      transition:background .1s;
+      user-select:none;
+    }
+    label.item:hover{background:rgba(255,255,255,0.05);}
+
+    input[type="checkbox"]{appearance:none;-webkit-appearance:none;width:22px;height:22px;border-radius:6px;border:2px solid var(--accent);cursor:pointer;position:relative;background:transparent;box-sizing:border-box;flex:0 0 22px;}
+    input[type="checkbox"]:checked{background:var(--success);border-color:transparent;}
+    input[type="checkbox"]:checked::after{content:'\2713';position:absolute;left:3px;top:-1px;color:var(--white);font-size:18px;font-weight:bold;}
+
+    .item-text{font-size:15px;color:var(--white);opacity:0.95;transition:color .1s, text-decoration-color .1s;}
+    input[type="checkbox"]:checked ~ .item-text{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:var(--white);color:rgba(255,255,255,0.6);}
+
+    .footer{margin-top:18px;font-size:12px;color:var(--muted);display:flex;align-items:center;justify-content:space-between;}
+    .small-btn{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:6px 10px;border-radius:8px;color:var(--muted);font-size:13px;cursor:pointer;}
+
+    .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .18s;}
+    .overlay.show{opacity:1;pointer-events:auto;}
+    .overlay .bubble{background:rgba(10,14,18,0.9);padding:18px 22px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);color:var(--white);font-weight:600;}
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <h1>Blue procotol dailies</h1>
+    <p class="lead">Click to mark an item. When every item is checked the page refreshes automatically.</p>
+
+    <div class="list" id="dailies">
+      <label class="item"><input type="checkbox"><span class="item-text">Guild Check-in and Cargo</span></label>
+      <label class="item"><input type="checkbox"><span class="item-text">World Boss Crusade</span></label>
+      <label class="item"><input type="checkbox"><span class="item-text">Unstable Space</span></label>
+      <label class="item"><input type="checkbox"><span class="item-text">Mystery Store</span></label>
+      <label class="item"><input type="checkbox"><span class="item-text">Season Pass Activity Merits</span></label>
+      <label class="item"><input type="checkbox"><span class="item-text">Bureau Commissions</span></label>
+      <label class="item"><input type="checkbox"><span class="item-text">Elite/World Boss Hunt</span></label>
+      <label class="item"><input type="checkbox"><span class="item-text">Life Skill Focus</span></label>
+      <label class="item"><input type="checkbox"><span class="item-text">Homestead Commissions</span></label>
+      <label class="item"><input type="checkbox"><span class="item-text">Quests</span></label>
+    </div>
+
+    <div class="footer">
+      <div>Tip: click anywhere on a row to mark it.</div>
+      <button id="clear" class="small-btn" type="button">Clear all</button>
+    </div>
+  </main>
+
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="bubble">All done — resetting...</div>
+  </div>
+
+  <script>
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const overlay = document.getElementById('overlay');
+    const clearBtn = document.getElementById('clear');
+
+    function allChecked(){return [...checkboxes].every(cb=>cb.checked);}
+
+    function checkForReset(){
+      if(allChecked()){
+        overlay.classList.add('show');
+        setTimeout(()=>{
+          checkboxes.forEach(cb=>cb.checked=false);
+          overlay.classList.remove('show');
+        },1000);
+      }
+    }
+
+    checkboxes.forEach(cb=>{
+      cb.addEventListener('change',checkForReset);
+    });
+
+    clearBtn.addEventListener('click',()=>{
+      checkboxes.forEach(cb=>cb.checked=false);
+    });
+  </script>
+</body>
+</html>
