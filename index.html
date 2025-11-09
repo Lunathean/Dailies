@@ -157,6 +157,11 @@
       color: var(--white);
       font-weight: 600;
     }
+
+    /* Hide optional guild activities by default */
+    .weekend-only {
+      display: none;
+    }
   </style>
 </head>
 
@@ -176,8 +181,10 @@
       <label class="item"><input type="checkbox"><span class="item-text">Life Skill Focus</span></label>
       <label class="item"><input type="checkbox"><span class="item-text">Homestead Commissions</span></label>
       <label class="item"><input type="checkbox"><span class="item-text">Quests</span></label>
-      <label class="item"><input type="checkbox"><span class="item-text">Guild Hunt</span></label>
-      <label class="item"><input type="checkbox"><span class="item-text">Guild Dance</span></label>
+
+      <!-- These two only show Fri-Sun -->
+      <label class="item weekend-only"><input type="checkbox"><span class="item-text">Guild Hunt</span></label>
+      <label class="item weekend-only"><input type="checkbox"><span class="item-text">Guild Dance</span></label>
     </div>
 
     <div class="footer">
@@ -194,6 +201,14 @@
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     const overlay = document.getElementById('overlay');
     const clearBtn = document.getElementById('clear');
+
+    // Show Guild Hunt & Dance on Fri-Sun
+    const day = new Date().getDay(); // 0=Sun, 5=Fri, 6=Sat
+    if (day === 0 || day === 5 || day === 6) {
+      document.querySelectorAll('.weekend-only').forEach(el => {
+        el.style.display = 'flex';
+      });
+    }
 
     function allChecked() {
       return [...checkboxes].every(cb => cb.checked);
