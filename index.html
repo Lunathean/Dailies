@@ -107,31 +107,38 @@
       cursor:pointer;
     }
 
-    /* message popup */
-    #msg {
-      position:fixed;
-      right:20px;
-      top:20px;
-      background:rgba(15,20,25,0.95);
-      color:#fff;
-      padding:12px 16px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,0.06);
-      box-shadow:0 8px 30px rgba(0,0,0,0.6);
-      opacity:0;
-      transform:translateY(-6px);
-      transition:opacity .22s ease, transform .22s ease;
-      z-index:9999;
-      pointer-events:none;
-      font-weight:700;
+    /* Reset button bottom-right */
+    .reset-floating {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      display: none;
+      transform: translateY(8px);
+      opacity: 0;
+      transition: opacity .22s ease, transform .22s ease;
     }
-    #msg.show { opacity:1; transform:translateY(0); }
+    .reset-floating.show {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reset-floating button {
+      background: #238636;
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
 
     @media (max-width:880px){ .grid{ grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <main class="card" role="main" aria-live="polite">
+  <main class="card" role="main">
     <h1>Blue Protocol Dailies</h1>
     <p class="lead">Click any row to mark it. <strong>Guild Dance</strong> appears only on Fridays; <strong>Guild Hunt</strong> appears on Fri–Sun.</p>
 
@@ -139,42 +146,42 @@
       <!-- LEFT: MAIN DAILIES + QUEST -->
       <div>
         <div class="section-title">Dailies</div>
-        <div class="small-note">Complete these first — when all are checked you'll get a reset message.</div>
+        <div class="small-note">Complete these first — when all 8 are checked the reset button appears.</div>
 
         <div id="dailies" class="list">
-          <!-- NOTE: data-cat set to "dailies" for those 8 items -->
-          <label class="item"><input type="checkbox" data-cat="dailies"><span class="item-text">Mystery Store</span></label>
-          <label class="item"><input type="checkbox" data-cat="dailies"><span class="item-text">Guild Check-in and Cargo</span></label>
-          <label class="item"><input type="checkbox" data-cat="dailies"><span class="item-text">Unstable Space</span></label>
-          <label class="item"><input type="checkbox" data-cat="dailies"><span class="item-text">Elite/World Boss Hunt</span></label>
-          <label class="item"><input type="checkbox" data-cat="dailies"><span class="item-text">Life Skill Focus</span></label>
-          <label class="item"><input type="checkbox" data-cat="dailies"><span class="item-text">Season Pass Activity Merits</span></label>
-          <label class="item"><input type="checkbox" data-cat="dailies"><span class="item-text">Bureau Commissions</span></label>
-          <label class="item"><input type="checkbox" data-cat="dailies"><span class="item-text">Homestead Commissions</span></label>
+          <!-- The eight main dailies (only these control the button) -->
+          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Mystery Store</span></label>
+          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Guild Check-in and Cargo</span></label>
+          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Unstable Space</span></label>
+          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Elite/World Boss Hunt</span></label>
+          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Life Skill Focus</span></label>
+          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Season Pass Activity Merits</span></label>
+          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Bureau Commissions</span></label>
+          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Homestead Commissions</span></label>
         </div>
 
-        <!-- Quest separate tab below dailies -->
+        <!-- Quest separate, NO logic -->
         <div style="margin-top:18px; border-top:1px solid rgba(255,255,255,0.03); padding-top:16px;">
           <div class="section-title">Quest Log Check <span class="tooltip">(Hit L, Default Key)</span></div>
           <div class="list" id="quest-section">
-            <label class="item"><input type="checkbox" id="quest-box" data-cat="quest"><span class="item-text">Quests</span></label>
+            <label class="item"><input type="checkbox" id="quest-box"><span class="item-text">Quests</span></label>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT: Weekly / Guild -->
+      <!-- RIGHT: WEEKLY / GUILD (no auto logic) -->
       <div>
         <div class="section-title">Daily Activities (Weekly Accumulated)</div>
         <div class="list" id="weekly">
-          <label class="item"><input type="checkbox" id="worldboss" data-cat="worldboss"><span class="item-text">World Boss Crusade</span></label>
+          <label class="item"><input type="checkbox" id="worldboss"><span class="item-text">World Boss Crusade</span></label>
         </div>
 
         <div style="margin-top:18px;">
           <div class="section-title">Guild Dailies (Fri–Sun)</div>
-          <div class="small-note">These appear Fri–Sun. When both are checked they will reset.</div>
+          <div class="small-note">These appear Fri–Sun. They behave as ordinary checkboxes now.</div>
           <div class="list" id="guild">
-            <label class="item" id="label-guild-hunt"><input type="checkbox" data-cat="guild" id="guild-hunt"><span class="item-text">Guild Hunt</span></label>
-            <label class="item" id="label-guild-dance"><input type="checkbox" data-cat="guild" id="guild-dance"><span class="item-text">Guild Dance</span></label>
+            <label class="item" id="label-guild-hunt"><input type="checkbox" id="guild-hunt"><span class="item-text">Guild Hunt</span></label>
+            <label class="item" id="label-guild-dance"><input type="checkbox" id="guild-dance"><span class="item-text">Guild Dance</span></label>
           </div>
         </div>
       </div>
@@ -186,20 +193,42 @@
     </div>
   </main>
 
-  <div id="msg" role="status" aria-live="polite"></div>
+  <!-- Reset floating button -->
+  <div class="reset-floating" id="resetFloating">
+    <button id="resetMainBtn" title="Reset all checked main dailies">Reset All Checked Dailies</button>
+  </div>
 
 <script>
-  // Helper functions
-  const msgEl = document.getElementById('msg');
-  function showMsg(text){
-    msgEl.textContent = text;
-    msgEl.classList.add('show');
-  }
-  function hideMsg(){
-    msgEl.classList.remove('show');
+  // Elements
+  const mainDailyBoxes = Array.from(document.querySelectorAll('input.main-daily'));
+  const resetFloating = document.getElementById('resetFloating');
+  const resetMainBtn = document.getElementById('resetMainBtn');
+  const clearAllBtn = document.getElementById('clearAll');
+
+  // Helper: update whether reset button should show
+  function updateResetButtonVisibility() {
+    const allChecked = mainDailyBoxes.length > 0 && mainDailyBoxes.every(cb => cb.checked);
+    resetFloating.classList.toggle('show', allChecked);
   }
 
-  // Guild visibility by day (keeps earlier behavior)
+  // Attach change listeners for main dailies only
+  mainDailyBoxes.forEach(cb => {
+    cb.addEventListener('change', updateResetButtonVisibility);
+  });
+
+  // ✅ Reset button behavior: uncheck EVERY checkbox on the page
+  resetMainBtn.addEventListener('click', () => {
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+    updateResetButtonVisibility();
+  });
+
+  // Clear all button resets every checkbox on the page
+  clearAllBtn.addEventListener('click', () => {
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+    updateResetButtonVisibility();
+  });
+
+  // Guild daily visibility logic
   (function applyDayLogic(){
     const today = new Date().getDay(); // 0=Sun..6=Sat
     const huntLabel = document.getElementById('label-guild-hunt');
@@ -212,90 +241,13 @@
     if (today === 5 || today === 6 || today === 0) huntLabel.style.display = 'flex'; // Fri, Sat, Sun
   })();
 
-  // Get visible boxes in a category (ignore hidden ones)
-  function visibleBoxes(cat){
-    const all = Array.from(document.querySelectorAll('input[type="checkbox"][data-cat="' + cat + '"]'));
-    return all.filter(cb => cb.closest('label').offsetParent !== null);
-  }
-
-  // Reset category boxes
-  function resetCategory(cat){
-    visibleBoxes(cat).forEach(cb => cb.checked = false);
-  }
-
-  // Config messages and delay
-  const config = {
-    dailies: { msg: 'Dailies Complete! Resetting......', delay: 1400 },
-    quest: { msg: 'Quest Log Completed! Resetting......', delay: 1100 },
-    worldboss: { msg: 'World Boss taken down! Resetting......', delay: 1100 },
-    guild: { msg: 'Guild Dailies Completed! Resetting......', delay: 1400 }
-  };
-
-  // Check completion for a category — only runs when something changed in that category
-  function checkCompletion(cat){
-    const boxes = visibleBoxes(cat);
-    if (boxes.length === 0) return false;
-    const allChecked = boxes.every(cb => cb.checked);
-    if (!allChecked) return false;
-
-    // show message, then reset only that category after delay
-    showMsg(config[cat].msg);
-    setTimeout(() => {
-      resetCategory(cat);
-      // keep message visible a moment longer and then hide
-      setTimeout(hideMsg, 400);
-    }, config[cat].delay);
-    return true;
-  }
-
-  // Attach change listeners to checkboxes (clean and robust)
-  document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-    cb.addEventListener('change', (e) => {
-      const cat = cb.getAttribute('data-cat');
-      if (!cat) return;
-      // Only check the category of the changed box (faster & avoids cross-trigger)
-      checkCompletion(cat);
-
-      // Special case: if guild item changed, guild completion depends on both guild boxes
-      // (already handled because both guild inputs have data-cat="guild")
-    });
-  });
-
-  // Clicking the label toggles checkbox naturally because input is inside label.
-  // For keyboard convenience, allow 'L' to toggle Quest
+  // Allow "L" key to toggle quest checkbox
   document.addEventListener('keydown', (e) => {
     if (e.key.toLowerCase() === 'l') {
       const qb = document.getElementById('quest-box');
-      if (qb) {
-        qb.checked = !qb.checked;
-        // fire change event manually to trigger logic
-        qb.dispatchEvent(new Event('change', { bubbles: true }));
-      }
+      if (qb) qb.checked = !qb.checked;
     }
   });
-
-  // Clear all button
-  document.getElementById('clearAll').addEventListener('click', () => {
-    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-    showMsg('All cleared.');
-    setTimeout(hideMsg, 900);
-  });
-
-  // Optional: show local timezone in footer (non-intrusive)
-  (function showTZ(){
-    try{
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const footer = document.querySelector('main .small-note') || null;
-      if (footer) {
-        const el = document.createElement('div');
-        el.style.marginTop = '8px';
-        el.style.opacity = '0.7';
-        el.style.fontSize = '13px';
-        el.textContent = 'Local time zone: ' + tz;
-        footer.parentNode.insertBefore(el, footer.nextSibling);
-      }
-    }catch(e){}
-  })();
 </script>
 </body>
 </html>
