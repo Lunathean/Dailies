@@ -5,170 +5,56 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Blue procotol dailies</title>
   <style>
-    :root {
-      --bg: #0b0f14;
-      --muted: #9aa6b2;
-      --accent: #3da0ff;
-      --success: #00c46b;
-      --white: #ffffff;
+    :root{
+      --bg:#0b0f14;
+      --muted:#9aa6b2;
+      --accent:#3da0ff;
+      --success:#00c46b;
+      --white:#ffffff;
+    }
+    html,body{height:100%;margin:0;}
+    body{
+      font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background:linear-gradient(180deg,var(--bg) 0%, #071018 100%);
+      color:var(--muted);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
     }
 
-    html, body {
-      height: 100%;
-      margin: 0;
-    }
+    .card{width:min(820px,96vw);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:20px 28px 28px 28px;box-shadow:0 6px 30px rgba(2,6,12,0.6);border:1px solid rgba(255,255,255,0.03);}
+    h1{margin:0 0 8px 0;color:var(--white);font-size:20px;font-weight:600}
+    p.lead{margin:0 0 14px 0;color:var(--muted);font-size:13px}
 
-    body {
-      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-      background: linear-gradient(180deg, var(--bg) 0%, #071018 100%);
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 28px;
-    }
+    .list{display:flex;flex-direction:column;gap:10px}
+    label.item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:background .08s;user-select:none}
+    label.item:hover{background:rgba(255,255,255,0.03)}
 
-    .card {
-      width: min(720px, 96vw);
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius: 14px;
-      padding: 28px;
-      box-shadow: 0 6px 30px rgba(2,6,12,0.6);
-      border: 1px solid rgba(255,255,255,0.03);
-    }
+    /* checkbox visual */
+    input[type="checkbox"]{appearance:none;-webkit-appearance:none;width:22px;height:22px;border-radius:6px;border:2px solid var(--accent);cursor:pointer;position:relative;background:transparent;box-sizing:border-box;flex:0 0 22px}
+    input[type="checkbox"]:checked{background:var(--success);border-color:transparent}
+    input[type="checkbox"]:checked::after{content:'✔';position:absolute;left:3px;top:-1px;color:var(--white);font-size:18px;font-weight:700}
 
-    h1 {
-      margin: 0 0 8px 0;
-      color: var(--white);
-      font-size: 20px;
-      font-weight: 600;
-    }
+    .item-text{font-size:15px;color:var(--white);opacity:0.95;transition:color .1s,text-decoration-color .1s}
+    input[type="checkbox"]:checked ~ .item-text{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:var(--white);color:rgba(255,255,255,0.6)}
 
-    p.lead {
-      margin: 0 0 18px 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
+    .footer{margin-top:14px;font-size:12px;color:var(--muted);display:flex;align-items:center;justify-content:space-between}
+    .small-btn{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:6px 10px;border-radius:8px;color:var(--muted);font-size:13px;cursor:pointer}
 
-    .list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .18s}
+    .overlay.show{opacity:1;pointer-events:auto}
+    .overlay .bubble{background:rgba(10,14,18,0.95);padding:16px 22px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);color:var(--white);font-weight:600}
 
-    label.item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background .1s;
-      user-select: none;
-    }
-
-    label.item:hover {
-      background: rgba(255,255,255,0.05);
-    }
-
-    input[type="checkbox"] {
-      appearance: none;
-      -webkit-appearance: none;
-      width: 22px;
-      height: 22px;
-      border-radius: 6px;
-      border: 2px solid var(--accent);
-      cursor: pointer;
-      position: relative;
-      background: transparent;
-      box-sizing: border-box;
-      flex: 0 0 22px;
-    }
-
-    input[type="checkbox"]:checked {
-      background: var(--success);
-      border-color: transparent;
-    }
-
-    input[type="checkbox"]:checked::after {
-      content: '✔';
-      position: absolute;
-      left: 3px;
-      top: -1px;
-      color: var(--white);
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .item-text {
-      font-size: 15px;
-      color: var(--white);
-      opacity: 0.95;
-      transition: color .1s, text-decoration-color .1s;
-    }
-
-    input[type="checkbox"]:checked ~ .item-text {
-      text-decoration: line-through;
-      text-decoration-thickness: 2px;
-      text-decoration-color: var(--white);
-      color: rgba(255,255,255,0.6);
-    }
-
-    .footer {
-      margin-top: 18px;
-      font-size: 12px;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .small-btn {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.04);
-      padding: 6px 10px;
-      border-radius: 8px;
-      color: var(--muted);
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .overlay {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity .18s;
-    }
-
-    .overlay.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .overlay .bubble {
-      background: rgba(10,14,18,0.9);
-      padding: 18px 22px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.04);
-      color: var(--white);
-      font-weight: 600;
-    }
-
-    /* Hide optional guild activities by default */
-    .weekend-only {
-      display: none;
-    }
+    /* hide weekend items by default; JS will unhide accordingly */
+    .weekend-only{display:none}
+    @media (max-width:480px){.card{padding:16px}}
   </style>
 </head>
-
 <body>
   <main class="card" role="main">
     <h1>Blue procotol dailies</h1>
-    <p class="lead">Click to mark an item. When every item is checked the page refreshes automatically.</p>
+    <p class="lead">Click any row to mark it. <strong>Guild Dance</strong> appears only on Fridays; <strong>Guild Hunt</strong> appears on Fri–Sun.</p>
 
     <div class="list" id="dailies">
       <label class="item"><input type="checkbox"><span class="item-text">Guild Check-in and Cargo</span></label>
@@ -182,14 +68,16 @@
       <label class="item"><input type="checkbox"><span class="item-text">Homestead Commissions</span></label>
       <label class="item"><input type="checkbox"><span class="item-text">Quests</span></label>
 
-      <!-- These two only show Fri-Sun -->
-      <label class="item weekend-only"><input type="checkbox"><span class="item-text">Guild Hunt</span></label>
-      <label class="item weekend-only"><input type="checkbox"><span class="item-text">Guild Dance</span></label>
+      <!-- weekend items (hidden by default) -->
+      <label class="item weekend-only" id="guild-hunt"><input type="checkbox"><span class="item-text">Guild Hunt</span></label>
+      <label class="item weekend-only" id="guild-dance"><input type="checkbox"><span class="item-text">Guild Dance</span></label>
     </div>
 
     <div class="footer">
       <div>Tip: click anywhere on a row to mark it.</div>
-      <button id="clear" class="small-btn" type="button">Clear all</button>
+      <div>
+        <button id="clear" class="small-btn" type="button">Clear all</button>
+      </div>
     </div>
   </main>
 
@@ -198,39 +86,60 @@
   </div>
 
   <script>
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    // Grab elements
+    const allCheckboxes = Array.from(document.querySelectorAll('input[type="checkbox"]'));
     const overlay = document.getElementById('overlay');
     const clearBtn = document.getElementById('clear');
+    const guildHuntLabel = document.getElementById('guild-hunt');
+    const guildDanceLabel = document.getElementById('guild-dance');
 
-    // Show Guild Hunt & Dance on Fri-Sun
-    const day = new Date().getDay(); // 0=Sun, 5=Fri, 6=Sat
-    if (day === 0 || day === 5 || day === 6) {
-      document.querySelectorAll('.weekend-only').forEach(el => {
-        el.style.display = 'flex';
-      });
-    }
+    // Determine today's day (0=Sun ... 6=Sat)
+    const today = new Date().getDay();
 
-    function allChecked() {
-      return [...checkboxes].every(cb => cb.checked);
-    }
+    // Visibility rules:
+    // - Guild Dance: only Friday (5)
+    // - Guild Hunt: Friday (5), Saturday (6), Sunday (0)
+    function applyDayLogic(day){
+      // hide by default
+      guildHuntLabel.style.display = 'none';
+      guildDanceLabel.style.display = 'none';
 
-    function checkForReset() {
-      if (allChecked()) {
-        overlay.classList.add('show');
-        setTimeout(() => {
-          checkboxes.forEach(cb => cb.checked = false);
-          overlay.classList.remove('show');
-        }, 1000);
+      if(day === 5){ // Friday
+        guildHuntLabel.style.display = 'flex';
+        guildDanceLabel.style.display = 'flex';
+      } else if(day === 6 || day === 0){ // Sat or Sun
+        guildHuntLabel.style.display = 'flex';
       }
     }
 
-    checkboxes.forEach(cb => {
-      cb.addEventListener('change', checkForReset);
-    });
+    applyDayLogic(today);
 
-    clearBtn.addEventListener('click', () => {
-      checkboxes.forEach(cb => cb.checked = false);
-    });
+    // Use only visible checkboxes when checking "all done"
+    function visibleCheckboxes(){
+      return allCheckboxes.filter(cb => cb.closest('label').offsetParent !== null);
+    }
+
+    function allVisibleChecked(){
+      const visible = visibleCheckboxes();
+      return visible.length > 0 && visible.every(cb => cb.checked);
+    }
+
+    function onChange(){
+      if(allVisibleChecked()){
+        overlay.classList.add('show');
+        setTimeout(()=>{
+          // clear only visible checkboxes for immediate visual reset
+          visibleCheckboxes().forEach(cb => cb.checked = false);
+          overlay.classList.remove('show');
+        },900);
+      }
+    }
+
+    // Attach listeners
+    allCheckboxes.forEach(cb => cb.addEventListener('change', onChange));
+    clearBtn.addEventListener('click', ()=> allCheckboxes.forEach(cb => cb.checked = false));
+
+    // Accessibility: allow label clicks (already works because input is inside label)
   </script>
 </body>
 </html>
