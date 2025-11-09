@@ -7,107 +7,145 @@
   <style>
     :root {
       --bg:#0b0f14;
-      --muted:#9aa6b2;
+      --bg2:#0f151c;
+      --muted:#a2adb8;
       --accent:#3da0ff;
       --success:#00c46b;
       --white:#ffffff;
     }
-    html,body { height:100%; margin:0; }
+
+    html, body { height:100%; margin:0; }
+
     body {
-      font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-      background:linear-gradient(180deg,var(--bg) 0%, #071018 100%);
-      color:var(--muted);
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      padding:28px;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+      color: var(--muted);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 20px;
     }
 
     .card {
-      width:min(1100px,96vw);
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:14px;
-      padding:22px 28px;
-      box-shadow:0 6px 30px rgba(2,6,12,0.6);
-      border:1px solid rgba(255,255,255,0.03);
+      width: min(1100px, 96vw);
+      background: rgba(255,255,255,0.03);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.05);
+      backdrop-filter: blur(8px);
     }
 
-    h1{ margin:0 0 8px 0; color:var(--white); font-size:22px; font-weight:700 }
-    p.lead{ margin:0 0 18px 0; color:var(--muted); font-size:13px }
+    h1 {
+      margin: 0 0 10px 0;
+      color: var(--white);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    p.lead {
+      margin: 0 0 20px 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
 
     .grid {
-      display:grid;
+      display: grid;
       grid-template-columns: 1fr 360px;
-      gap:28px;
+      gap: 40px;
     }
 
-    .list { display:flex; flex-direction:column; gap:10px; }
-
-    label.item{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:10px 12px;
-      border-radius:10px;
-      cursor:pointer;
-      transition:background .08s;
-      user-select:none;
-    }
-    label.item:hover{ background: rgba(255,255,255,0.02) }
-
-    /* checkbox visual */
-    input[type="checkbox"]{
-      appearance:none; -webkit-appearance:none;
-      width:20px; height:20px;
-      border-radius:6px;
-      border:2px solid var(--accent);
-      cursor:pointer;
-      position:relative;
-      background:transparent;
-      box-sizing:border-box;
-      flex:0 0 20px;
-    }
-    input[type="checkbox"]:checked{
-      background:var(--success);
-      border-color:transparent;
-    }
-    input[type="checkbox"]:checked::after{
-      content:'✔';
-      position:absolute;
-      left:3px; top:-1px;
-      color:var(--white);
-      font-size:14px; font-weight:700;
+    .section-title {
+      color: var(--white);
+      font-weight: 600;
+      margin: 12px 0 10px 0;
+      font-size: 16px;
     }
 
-    .item-text{
-      font-size:15px;
-      color:var(--white);
-      opacity:0.95;
-      transition:color .1s,text-decoration-color .1s;
-    }
-    input[type="checkbox"]:checked ~ .item-text{
-      text-decoration:line-through;
-      text-decoration-thickness:2px;
-      text-decoration-color:var(--white);
-      color:rgba(255,255,255,0.6);
+    .small-note {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 10px;
     }
 
-    .tooltip { font-size:13px; color: rgba(255,255,255,0.4); margin-left:4px; opacity:0.9 }
+    .list { display: flex; flex-direction: column; gap: 10px; }
 
-    .section-title { color:var(--white); font-weight:600; margin:6px 0 8px 0 }
-    .small-note { color:var(--muted); font-size:13px; margin-bottom:8px }
-
-    .small-btn{
-      background:transparent;
-      border:1px solid rgba(255,255,255,0.04);
-      padding:6px 10px;
-      border-radius:8px;
-      color:var(--muted);
-      font-size:13px;
-      cursor:pointer;
+    label.item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.1s ease, transform 0.1s ease;
+      user-select: none;
     }
 
-    /* Reset button bottom-right */
+    label.item:hover {
+      background: rgba(255,255,255,0.04);
+      transform: translateY(-1px);
+    }
+
+    input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px; height: 20px;
+      border-radius: 6px;
+      border: 2px solid var(--accent);
+      cursor: pointer;
+      position: relative;
+      background: transparent;
+      flex-shrink: 0;
+      transition: all 0.12s ease;
+    }
+
+    input[type="checkbox"]:checked {
+      background: var(--success);
+      border-color: transparent;
+    }
+
+    input[type="checkbox"]:checked::after {
+      content: '✔';
+      position: absolute;
+      left: 3px; top: -1px;
+      color: var(--white);
+      font-size: 14px; font-weight: 700;
+    }
+
+    .item-text {
+      font-size: 15px;
+      color: var(--white);
+      opacity: 0.95;
+      transition: color 0.1s, text-decoration-color 0.1s;
+    }
+
+    input[type="checkbox"]:checked ~ .item-text {
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--white);
+      color: rgba(255,255,255,0.6);
+    }
+
+    .tooltip { font-size: 13px; color: rgba(255,255,255,0.4); margin-left: 4px; }
+
+    .small-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 6px 12px;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .small-btn:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    /* Floating reset button */
     .reset-floating {
       position: fixed;
       bottom: 20px;
@@ -127,11 +165,18 @@
       background: #238636;
       color: white;
       border: none;
-      padding: 10px 14px;
-      border-radius: 8px;
+      padding: 12px 18px;
+      border-radius: 10px;
       font-weight: 700;
+      font-size: 14px;
       cursor: pointer;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+
+    .reset-floating button:hover {
+      background: #2bcf5c;
+      transform: translateY(-1px);
     }
 
     @media (max-width:880px){ .grid{ grid-template-columns: 1fr; } }
@@ -140,7 +185,10 @@
 <body>
   <main class="card" role="main">
     <h1>Blue Protocol Dailies</h1>
-    <p class="lead">Click any row to mark it. <strong>Guild Dance</strong> appears only on Fridays; <strong>Guild Hunt</strong> appears on Fri–Sun.</p>
+    <p class="lead">
+      Click any row to mark it. <strong>Guild Dance</strong> appears on Fridays; 
+      <strong>Guild Hunt</strong> appears Fri–Sun.
+    </p>
 
     <div class="grid">
       <!-- LEFT: MAIN DAILIES + QUEST -->
@@ -149,99 +197,81 @@
         <div class="small-note">Complete these first — when all 8 are checked the reset button appears.</div>
 
         <div id="dailies" class="list">
-          <!-- The eight main dailies (only these control the button) -->
-          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Mystery Store</span></label>
-          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Guild Check-in and Cargo</span></label>
-          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Unstable Space</span></label>
-          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Elite/World Boss Hunt</span></label>
-          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Life Skill Focus</span></label>
-          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Season Pass Activity Merits</span></label>
-          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Bureau Commissions</span></label>
-          <label class="item"><input type="checkbox" class="main-daily" data-cat="dailies"><span class="item-text">Homestead Commissions</span></label>
+          <label class="item"><input type="checkbox" class="main-daily"><span class="item-text">Mystery Store</span></label>
+          <label class="item"><input type="checkbox" class="main-daily"><span class="item-text">Guild Check-in and Cargo</span></label>
+          <label class="item"><input type="checkbox" class="main-daily"><span class="item-text">Unstable Space</span></label>
+          <label class="item"><input type="checkbox" class="main-daily"><span class="item-text">Elite/World Boss Hunt</span></label>
+          <label class="item"><input type="checkbox" class="main-daily"><span class="item-text">Life Skill Focus</span></label>
+          <label class="item"><input type="checkbox" class="main-daily"><span class="item-text">Season Pass Activity Merits</span></label>
+          <label class="item"><input type="checkbox" class="main-daily"><span class="item-text">Bureau Commissions</span></label>
+          <label class="item"><input type="checkbox" class="main-daily"><span class="item-text">Homestead Commissions</span></label>
         </div>
 
-        <!-- Quest separate, NO logic -->
-        <div style="margin-top:18px; border-top:1px solid rgba(255,255,255,0.03); padding-top:16px;">
-          <div class="section-title">Quest Log Check <span class="tooltip">(Hit L, Default Key)</span></div>
+        <div style="margin-top:20px; border-top:1px solid rgba(255,255,255,0.05); padding-top:16px;">
+          <div class="section-title">Quest Log Check <span class="tooltip">(L is Default Key)</span></div>
           <div class="list" id="quest-section">
             <label class="item"><input type="checkbox" id="quest-box"><span class="item-text">Quests</span></label>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT: WEEKLY / GUILD (no auto logic) -->
+      <!-- RIGHT: WEEKLY / GUILD -->
       <div>
         <div class="section-title">Daily Activities (Weekly Accumulated)</div>
-        <div class="list" id="weekly">
-          <label class="item"><input type="checkbox" id="worldboss"><span class="item-text">World Boss Crusade</span></label>
+        <div class="list">
+          <label class="item"><input type="checkbox"><span class="item-text">World Boss Crusade <span class="tooltip">Open Daily Between 10AM–4PM PST</span></span></label>
         </div>
 
-        <div style="margin-top:18px;">
+        <div style="margin-top:20px;">
           <div class="section-title">Guild Dailies (Fri–Sun)</div>
-          <div class="small-note">These appear Fri–Sun. They behave as ordinary checkboxes now.</div>
-          <div class="list" id="guild">
-            <label class="item" id="label-guild-hunt"><input type="checkbox" id="guild-hunt"><span class="item-text">Guild Hunt</span></label>
-            <label class="item" id="label-guild-dance"><input type="checkbox" id="guild-dance"><span class="item-text">Guild Dance</span></label>
+          <div class="small-note">These are available Fri–Sun. You can mark them anytime.</div>
+          <div class="list">
+            <label class="item"><input type="checkbox"><span class="item-text">Guild Hunt <span class="tooltip">Open Fri/Sat/Sun 8AM–10PM PST</span></span></label>
+            <label class="item"><input type="checkbox"><span class="item-text">Guild Dance <span class="tooltip">Open Friday 9:30AM–9:30PM PST</span></span></label>
           </div>
         </div>
       </div>
     </div>
 
-    <div style="margin-top:18px; display:flex; justify-content:space-between; align-items:center;">
+    <div style="margin-top:22px; display:flex; justify-content:space-between; align-items:center;">
       <div style="color:var(--muted); font-size:13px">Tip: click anywhere on a row to mark it.</div>
       <div><button id="clearAll" class="small-btn" type="button">Clear all</button></div>
     </div>
   </main>
 
-  <!-- Reset floating button -->
+  <!-- Floating Reset Button -->
   <div class="reset-floating" id="resetFloating">
-    <button id="resetMainBtn" title="Reset all checked main dailies">Reset All Checked Dailies</button>
+    <button id="resetMainBtn" title="Reset all checked boxes">New Day Reset</button>
   </div>
 
 <script>
-  // Elements
   const mainDailyBoxes = Array.from(document.querySelectorAll('input.main-daily'));
   const resetFloating = document.getElementById('resetFloating');
   const resetMainBtn = document.getElementById('resetMainBtn');
   const clearAllBtn = document.getElementById('clearAll');
 
-  // Helper: update whether reset button should show
   function updateResetButtonVisibility() {
     const allChecked = mainDailyBoxes.length > 0 && mainDailyBoxes.every(cb => cb.checked);
     resetFloating.classList.toggle('show', allChecked);
   }
 
-  // Attach change listeners for main dailies only
   mainDailyBoxes.forEach(cb => {
     cb.addEventListener('change', updateResetButtonVisibility);
   });
 
-  // ✅ Reset button behavior: uncheck EVERY checkbox on the page
+  // Reset button unchecks everything
   resetMainBtn.addEventListener('click', () => {
     document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
     updateResetButtonVisibility();
   });
 
-  // Clear all button resets every checkbox on the page
+  // Clear all button also unchecks everything
   clearAllBtn.addEventListener('click', () => {
     document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
     updateResetButtonVisibility();
   });
 
-  // Guild daily visibility logic
-  (function applyDayLogic(){
-    const today = new Date().getDay(); // 0=Sun..6=Sat
-    const huntLabel = document.getElementById('label-guild-hunt');
-    const danceLabel = document.getElementById('label-guild-dance');
-
-    huntLabel.style.display = 'none';
-    danceLabel.style.display = 'none';
-
-    if (today === 5) danceLabel.style.display = 'flex'; // Friday
-    if (today === 5 || today === 6 || today === 0) huntLabel.style.display = 'flex'; // Fri, Sat, Sun
-  })();
-
-  // Allow "L" key to toggle quest checkbox
+  // "L" toggles quest checkbox
   document.addEventListener('keydown', (e) => {
     if (e.key.toLowerCase() === 'l') {
       const qb = document.getElementById('quest-box');
