@@ -145,7 +145,6 @@
       background: rgba(255,255,255,0.05);
     }
 
-    /* Floating reset button */
     .reset-floating {
       position: fixed;
       bottom: 20px;
@@ -180,18 +179,19 @@
     }
 
     @media (max-width:880px){ .grid{ grid-template-columns: 1fr; } }
+
+    .locked { opacity: 0.45; }
+    .unlocked { color: var(--success); font-weight: 700; }
   </style>
 </head>
 <body>
   <main class="card" role="main">
     <h1>Blue Protocol Dailies</h1>
     <p class="lead">
-      Click any row to mark it. <strong>Guild Dance</strong> appears on Fridays; 
-      <strong>Guild Hunt</strong> appears Fri–Sun.
+      Click any row to mark it. <strong>Guild Dance</strong> and <strong>Guild Hunt</strong> auto-lock or unlock based on your local time.
     </p>
 
     <div class="grid">
-      <!-- LEFT: MAIN DAILIES + QUEST -->
       <div>
         <div class="section-title">Dailies</div>
         <div class="small-note">Complete these first — when all 8 are checked the reset button appears.</div>
@@ -215,19 +215,18 @@
         </div>
       </div>
 
-      <!-- RIGHT: WEEKLY / GUILD -->
       <div>
-        <div class="section-title">Daily Activities (Weekly Accumulated)</div>
+        <div class="section-title">Timed Activities</div>
         <div class="list">
-          <label class="item"><input type="checkbox"><span class="item-text">World Boss Crusade <span class="tooltip">Open Daily Between 10AM–4PM PST</span></span></label>
+          <label class="item" id="crusadeRow"><input type="checkbox"><span class="item-text">World Boss Crusade <span class="tooltip">10AM–4PM PST</span></span></label>
         </div>
 
         <div style="margin-top:20px;">
-          <div class="section-title">Guild Dailies (Fri–Sun)</div>
-          <div class="small-note">These are available Fri–Sun. You can mark them anytime.</div>
+          <div class="section-title">Guild Dailies</div>
+          <div class="small-note">Automatically locks/unlocks based on PST converted into your local time.</div>
           <div class="list">
-            <label class="item"><input type="checkbox"><span class="item-text">Guild Hunt <span class="tooltip">Open Fri/Sat/Sun 8AM–10PM PST</span></span></label>
-            <label class="item"><input type="checkbox"><span class="item-text">Guild Dance <span class="tooltip">Open Friday 9:30AM–9:30PM PST</span></span></label>
+            <label class="item" id="huntRow"><input type="checkbox"><span class="item-text">Guild Hunt <span class="tooltip">Fri–Sun, 8AM–10PM PST</span></span></label>
+            <label class="item" id="danceRow"><input type="checkbox"><span class="item-text">Guild Dance <span class="tooltip">Friday 8AM–10PM PST</span></span></label>
           </div>
         </div>
       </div>
@@ -239,7 +238,6 @@
     </div>
   </main>
 
-  <!-- Floating Reset Button -->
   <div class="reset-floating" id="resetFloating">
     <button id="resetMainBtn" title="Reset all checked boxes">Daily Reset</button>
   </div>
@@ -259,25 +257,61 @@
     cb.addEventListener('change', updateResetButtonVisibility);
   });
 
-  // Reset button unchecks everything
   resetMainBtn.addEventListener('click', () => {
     document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
     updateResetButtonVisibility();
   });
 
-  // Clear all button also unchecks everything
   clearAllBtn.addEventListener('click', () => {
     document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
     updateResetButtonVisibility();
   });
 
-  // "L" toggles quest checkbox
   document.addEventListener('keydown', (e) => {
     if (e.key.toLowerCase() === 'l') {
       const qb = document.getElementById('quest-box');
       if (qb) qb.checked = !qb.checked;
     }
   });
+
+  function getPST() {
+    const now = new Date();
+    const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+    return new Date(utc - 8 * 3600000);
+  }
+
+  function inRange(now, startHour, endHour) {
+    const s = new Date(now);
+    s.setHours(startHour, 0, 0, 0);
+    const e = new Date(now);
+    e.setHours(endHour, 0, 0, 0);
+    return now >= s && now <= e;
+  }
+
+  function updateTimedEvents() {
+    const nowPST = getPST();
+    const d = nowPST.getDay();
+
+    const crusade = document.getElementById('crusadeRow');
+    const hunt = document.getElementById('huntRow');
+    const dance = document.getElementById('danceRow');
+
+    const crusadeOpen = inRange(nowPST, 10, 16);
+    crusade.classList.toggle('locked', !crusadeOpen);
+    crusade.classList.toggle('unlocked', crusadeOpen);
+
+    const huntDay = (d === 5 || d === 6 || d === 0);
+    const huntOpen = huntDay && inRange(nowPST, 8, 22);
+    hunt.classList.toggle('locked', !huntOpen);
+    hunt.classList.toggle('unlocked', huntOpen);
+
+    const danceOpen = d === 5 && inRange(nowPST, 8, 22);
+    dance.classList.toggle('locked', !danceOpen);
+    dance.classList.toggle('unlocked', danceOpen);
+  }
+
+  updateTimedEvents();
+  setInterval(updateTimedEvents, 60000);
 </script>
 </body>
 </html>
